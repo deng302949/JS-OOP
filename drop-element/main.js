@@ -1,4 +1,43 @@
+var b1 = document.querySelector('#b1')
+var b2 = document.querySelector('#b2')
+var b3 = document.querySelector('#b3')
+var b4 = document.querySelector('#b4')
+var b5 = document.querySelector('#b5')
 var element = document.querySelector('#target');
+
+b1.addEventListener('click', function (e) {
+    console.log('innerHeight:' + window.innerHeight + " " + window.innerWidth);
+    console.log("outerHeight:" + window.outerHeight + " " + window.outerWidth);
+    console.log("pageXOffset:" + window.pageXOffset + " " + window.pageYOffset);
+    console.log("screenX :" + window.screenX + " " + window.screenY);
+
+}, false);
+
+b2.addEventListener('click', function (e) {
+    console.log('height:' + screen.height + " " + screen.width);
+    console.log("availHeight:" + screen.availHeight + " " + screen.availWidth);
+}, false);
+
+b3.addEventListener('click', function (e) {
+    var el=document.elementFromPoint(10,70);
+    el.style.color='red';
+}, false);
+
+b4.addEventListener('click', function (e) {
+    var rect=this.getBoundingClientRect();
+    console.log('left:'+rect.left+' right:'+rect.right+' top:'+rect.top+' bottom:'+rect.bottom+' width:'+rect.width+' height:'+rect.height);
+}, false);
+
+b5.addEventListener('click', function (e) {
+    console.log('clientLeft:'+element.clientLeft+' clientTop:'+element.clientTop);
+    console.log('clientWidth:'+element.clientWidth+' clientHeight:'+element.clientHeight);
+
+    console.log('offsetLeft:'+element.offsetLeft+' offsetTop:'+element.offsetTop);
+    console.log('offsetWidth:'+element.offsetWidth+' offsetHeight:'+element.offsetHeight);
+}, false);
+
+
+
 
 element.addEventListener('mousedown', start, false);
 
@@ -88,6 +127,8 @@ function setElementPos(ele, pos) {
         ele.style.top = pos.y + 'px';
     }
 }
+
+
 
 // var oElem = document.getElementById('target');
 

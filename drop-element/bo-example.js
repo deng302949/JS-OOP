@@ -1,6 +1,12 @@
 /**
  * 无对象编程实现拖拽
  */
+
+
+
+
+
+
 var oElem = document.getElementById('target');
 
 var startX = 0;
@@ -57,8 +63,8 @@ function getTransform() {
         i = 0,
         len = transformArr.length;
 
-    for(; i < len; i++)  {
-        if(transformArr[i] in divStyle) {
+    for (; i < len; i++) {
+        if (transformArr[i] in divStyle) {
             return transform = transformArr[i];
         }
     }
@@ -68,12 +74,12 @@ function getTransform() {
 
 
 function getTargetPos(elem) {
-    var pos = {x: 0, y: 0};
+    var pos = { x: 0, y: 0 };
     var transform = getTransform();
     // transform = false;
-    if(transform) {
+    if (transform) {
         var transformValue = getStyle(elem, transform);
-        if(transformValue == 'none') {
+        if (transformValue == 'none') {
             elem.style[transform] = 'translate(0, 0)';
             return pos;
         } else {
@@ -84,7 +90,7 @@ function getTargetPos(elem) {
             }
         }
     } else {
-        if(getStyle(elem, 'position') == 'static') {
+        if (getStyle(elem, 'position') == 'static') {
             elem.style.position = 'relative';
             return pos;
         } else {
@@ -101,8 +107,8 @@ function getTargetPos(elem) {
 // pos = { x: 200, y: 100 }
 function setTargetPos(elem, pos) {
     var transform = getTransform();
-    if(transform) {
-        elem.style[transform] = 'translate('+ pos.x +'px, '+ pos.y +'px)';
+    if (transform) {
+        elem.style[transform] = 'translate(' + pos.x + 'px, ' + pos.y + 'px)';
     } else {
         elem.style.left = pos.x + 'px';
         elem.style.top = pos.y + 'px';
@@ -114,7 +120,7 @@ function setTargetPos(elem, pos) {
  * 对象编程实现拖拽
  */
 ;
-(function() {
+(function () {
     // 这是一个私有属性，不需要被实例访问
     var transform = getTransform();
 
@@ -134,22 +140,22 @@ function setTargetPos(elem, pos) {
     Drag.prototype = {
         constructor: Drag,
 
-        init: function() {
+        init: function () {
             // 初始时需要做些什么事情
             this.setDrag();
         },
 
         // 稍作改造，仅用于获取当前元素的属性，类似于getName
-        getStyle: function(property) {
+        getStyle: function (property) {
             return document.defaultView.getComputedStyle ? document.defaultView.getComputedStyle(this.elem, false)[property] : this.elem.currentStyle[property];
         },
 
         // 用来获取当前元素的位置信息，注意与之前的不同之处
-        getPosition: function() {
-            var pos = {x: 0, y: 0};
-            if(transform) {
+        getPosition: function () {
+            var pos = { x: 0, y: 0 };
+            if (transform) {
                 var transformValue = this.getStyle(transform);
-                if(transformValue == 'none') {
+                if (transformValue == 'none') {
                     this.elem.style[transform] = 'translate(0, 0)';
                 } else {
                     var temp = transformValue.match(/-?\d+/g);
@@ -159,7 +165,7 @@ function setTargetPos(elem, pos) {
                     }
                 }
             } else {
-                if(this.getStyle('position') == 'static') {
+                if (this.getStyle('position') == 'static') {
                     this.elem.style.position = 'relative';
                 } else {
                     pos = {
@@ -173,9 +179,9 @@ function setTargetPos(elem, pos) {
         },
 
         // 用来设置当前元素的位置
-        setPostion: function(pos) {
-            if(transform) {
-                this.elem.style[transform] = 'translate('+ pos.x +'px, '+ pos.y +'px)';
+        setPostion: function (pos) {
+            if (transform) {
+                this.elem.style[transform] = 'translate(' + pos.x + 'px, ' + pos.y + 'px)';
             } else {
                 this.elem.style.left = pos.x + 'px';
                 this.elem.style.top = pos.y + 'px';
@@ -183,7 +189,7 @@ function setTargetPos(elem, pos) {
         },
 
         // 该方法用来绑定事件
-        setDrag: function() {
+        setDrag: function () {
             var self = this;
             this.elem.addEventListener('mousedown', start, false);
             function start(event) {
@@ -229,8 +235,8 @@ function setTargetPos(elem, pos) {
             i = 0,
             len = transformArr.length;
 
-        for(; i < len; i++)  {
-            if(transformArr[i] in divStyle) {
+        for (; i < len; i++) {
+            if (transformArr[i] in divStyle) {
                 return transform = transformArr[i];
             }
         }

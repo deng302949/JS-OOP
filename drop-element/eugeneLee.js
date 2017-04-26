@@ -1,4 +1,6 @@
-
+/**
+ * 框架模块定义与加载
+ */
 (function () {
     var moduleMap = {};
 
@@ -111,3 +113,94 @@ thin.define("ShapeFactory", ["ShapeTypes"], function (ShapeTypes) {
 var ShapeFactory = thin.use("ShapeFactory");
 // alert(ShapeFactory.getShape("CIRCLE", 5).area());
 // alert(ShapeFactory.getShape("RECTANGLE", 3, 4).area());
+
+/**
+ * DOM数据绑定
+ */
+thin.define('Person', [], function () {
+    function Person() {
+        this.name = 'Tom';
+        this.age = 25
+    }
+
+    Person.prototype.groupUp = function () {
+        this.age++;
+    }
+
+    return Person;
+})
+
+
+function parseElement(element, vm) {
+    var model = vm;
+
+    if (element.getAttribute('vm-model')) {
+        model = bindModel(element.getAttribute('vm-model'));
+    }
+
+    for (var i = 0; i < element.attributes.length; i++) {
+        parseAttribute(element, element.attributes[i], model);
+    }
+
+    for (var i = 0; i < element.children.length; i++) {
+        parseElement(element.children[i], model);
+    }
+}
+
+function bindModel(modelName) {
+    thin.log('model:' + modelName);
+
+    var model = thin.use(modelName, true);
+    var instance = new model();
+
+    return instance;
+}
+
+function parseAttribute(element, attr, model) {
+    if (attr.name.indexOf('vm-') === 0) {
+        var type = attr.name.slice(3);
+
+        switch (type) {
+            case 'init':
+                bindInti(element, attr.value, model);
+                break;
+            case 'vaule':
+                bindValue(element, attr.value, model);
+                break;
+            case "click":
+                bindClick(element, attr.value, model);
+                break;
+            case "enable":
+                bindEnable(element, attr.value, model, true);
+                break;
+            case "disable":
+                bindEnable(element, attr.value, model, false);
+                break;
+            case "visible":
+                bindVisible(element, attr.value, model, true);
+                break;
+            case "invisible":
+                bindVisible(element, attr.value, model, false);
+                break;
+            case "element":
+                model[attr.value] = element;
+                break;
+        }
+    }
+}
+
+function bindValue(element, key, vm) {
+    thin.log('binding value:' + key);
+
+    vm.$watch(key, function (value, oldValue) {
+        element.value = value || '';
+    })
+
+    element.onkeyup = function () {
+        vm[key] = element.value;
+    }
+
+    element.onpaste = function () {
+        vm[key] = element.value;
+    }
+}

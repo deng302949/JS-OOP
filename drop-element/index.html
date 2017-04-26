@@ -14,14 +14,16 @@
             cursor: move;
             border: 2px solid #000;
         }
+        
         #target2 {
             width: 40px;
             height: 40px;
-            background-color:blueviolet;
+            background-color: blueviolet;
             cursor: move;
             border: 2px solid #000;
         }
-        #d2{
+        
+        #d2 {
             height: 800px;
         }
     </style>
@@ -44,6 +46,13 @@
         <li>例子4</li>
         <li>例子5</li>
     </ul>
+    <!--数据绑定-->
+    <div vm-model="Person">
+        <input type="text" vm-value="name" />
+        <input type="text" vm-value="age" />
+        <input type="button" vm-click="growUp" value="Grow Up" />
+    </div>
+    
     <div id="d2"></div>
     <script src="main.js"></script>
     <script src="eugeneLee.js"></script>

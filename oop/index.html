@@ -7,61 +7,125 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>OOP</title>
     <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script>
-        var Class = (function () {
-            var _mix = function (r, s) {
-                for (var p in s) {
-                    if (s.hasOwnProperty(p)) {
-                        r[p] = s[p]
-                    }
-                }
-            }
 
-            var _extend = function () {
-
-                //开关 用来使生成原型时,不调用真正的构成流程init
-                this.initPrototype = true
-                var prototype = new this()
-                this.initPrototype = false
-
-                var items = Array.prototype.slice.call(arguments) || []
-                var item
-
-                //支持混入多个属性，并且支持{}也支持 Function
-                while (item = items.shift()) {
-                    _mix(prototype, item.prototype || item)
-                }
-
-
-                // 这边是返回的类，其实就是我们返回的子类
-                function SubClass() {
-                    if (!SubClass.initPrototype && this.init)
-                        this.init.apply(this, arguments)//调用init真正的构造函数
-                }
-
-                // 赋值原型链，完成继承
-                SubClass.prototype = prototype
-
-                // 改变constructor引用
-                SubClass.prototype.constructor = SubClass
-
-                // 为子类也添加extend方法
-                SubClass.extend = _extend
-
-                return SubClass
-            }
-            //超级父类
-            var Class = function () { }
-            //为超级父类添加extend方法
-            Class.extend = _extend
-
-            return Class
-        })()
-    </script>
+    <style lang="">
+        .content {
+            border: 1px solid #000;
+            background-color: bisque;
+            display: none;
+        }
+        
+        .content.active {
+            display: block;
+        }
+        
+        .menu {
+            display: inline-block;
+            list-style-type: none;
+        }
+        
+        .menu.active {
+            color: brown;
+        }
+        
+        .menu:hover {
+            cursor: pointer;
+            color: skyblue;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="tab">
+        <ul class="tab-menu">
+            <li class="menu active">标签1</li>
+            <li class="menu">标签2</li>
+            <li class="menu">标签3</li>
+        </ul>
+        <div class="tab-content">
+            <div class="content active">tab页1</div>
+            <div class="content">tab页2</div>
+            <div class="content">tab页3</div>
+        </div>
+    </div>
+    <script>
+        (function (window, $) {
+            var Tab = function (id) {
+                this.element = document.querySelector('.' + id);
+                this.init();
+            }
 
+            Tab.prototype = {
+                constructor: Tab,
+                init: function () {
+                    var self = this;
+                    var menus = document.querySelector('.tab-menu');
+                    menus.addEventListener('click', function (e) {
+                        if (e.target.nodeName.toUpperCase() === 'LI') {
+                            console.log(this);
+                            self.switch(e.target);
+                        }
+                    })
+                },
+                switch: function (target) {
+                    var oldIndex;
+                    var newIndex;
+                    var parent = target.parentNode;
+                    var oldEle = parent.querySelector('.active');
+                    var menus = parent.children;
+
+                    for (var i = 0, len = menus.length; i < len; i++) {
+                        if (menus[i] == oldEle) {
+                            oldIndex = i;
+                        }
+                        if (menus[i] == target) {
+                            newIndex = i;
+                        }
+                    }
+
+                    removeClass(oldEle, 'active');
+                    addClass(target, 'active');
+
+                    var contents = document.querySelectorAll('.content');
+                    removeClass(contents[oldIndex], 'active');
+                    addClass(contents[newIndex], 'active');
+
+                }
+            }
+
+            window.Tab = Tab;
+        })(window, $)
+
+        var tab = new Tab('tab');
+
+        function hasClass(obj, cls) {
+            return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+        }
+
+        function addClass(obj, cls) {
+            if (!this.hasClass(obj, cls)) obj.className += " " + cls;
+        }
+
+        function removeClass(obj, cls) {
+            if (hasClass(obj, cls)) {
+                var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+                obj.className = obj.className.replace(reg, ' ');
+            }
+        }
+
+        function toggleClass(obj, cls) {
+            if (hasClass(obj, cls)) {
+                removeClass(obj, cls);
+            } else {
+                addClass(obj, cls);
+            }
+        }
+
+        function toggleClassTest() {
+            var obj = document.getElementById('test');
+            toggleClass(obj, "testClass");
+        }
+    </script>
 </body>
 
 </html>
